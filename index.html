@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - Page Not Found</title>
+<style>
+  /* General page styles */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(135deg, #ff4d4d, #ffcc00);
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  h1 {
+    font-size: 12vw;
+    margin: 0;
+    animation: pulse 2s infinite;
+  }
+
+  p {
+    font-size: 1.8em;
+    margin: 20px 0;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  }
+
+  a {
+    font-size: 1.2em;
+    padding: 12px 25px;
+    color: #ff4d4d;
+    background: #fff;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  a:hover {
+    background: #ff4d4d;
+    color: #fff;
+    transform: scale(1.1);
+  }
+
+  /* Animation for the number */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* Floating emoji fun */
+  .emoji {
+    position: absolute;
+    font-size: 3em;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <h1>404</h1>
+  <p>Oops! This page got lost in space 🚀</p>
+  <a href="/">Go Back Home</a>
+
+  <!-- Floating emojis -->
+  <div class="emoji" style="left:10%;">💥</div>
+  <div class="emoji" style="left:30%; animation-duration: 7s;">👾</div>
+  <div class="emoji" style="left:50%; animation-duration: 6s;">🌟</div>
+  <div class="emoji" style="left:70%; animation-duration: 8s;">😵</div>
+  <div class="emoji" style="left:90%; animation-duration: 5s;">🛸</div>
+</body>
+</html>
