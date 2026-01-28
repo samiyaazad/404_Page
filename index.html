@@ -2,83 +2,179 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>404 – Catch It If You Can</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404 - Page Not Found</title>
+
 <style>
-  /* General page styles */
   body {
     margin: 0;
-    padding: 0;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(135deg, #ff4d4d, #ffcc00);
-    color: #fff;
     height: 100vh;
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Fake loading */
+  #loader {
+    position: fixed;
+    inset: 0;
+    background: #111;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    z-index: 10;
+  }
+
+  .bar {
+    width: 60%;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
     overflow: hidden;
   }
 
-  h1 {
-    font-size: 12vw;
-    margin: 0;
-    animation: pulse 2s infinite;
+  .fill {
+    height: 100%;
+    width: 0%;
+    background: lime;
+    transition: width 0.3s;
   }
 
-  p {
-    font-size: 1.8em;
-    margin: 20px 0;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  /* Main content */
+  #game {
+    display: none;
+    width: 100%;
+    height: 100%;
   }
 
-  a {
-    font-size: 1.2em;
-    padding: 12px 25px;
-    color: #ff4d4d;
-    background: #fff;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: all 0.3s ease;
+  #score {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    font-size: 1.2rem;
+    background: rgba(0,0,0,0.4);
+    padding: 8px 14px;
+    border-radius: 20px;
   }
 
-  a:hover {
-    background: #ff4d4d;
-    color: #fff;
+  #catch {
+    position: absolute;
+    font-size: 6rem;
+    user-select: none;
+    transition: transform 0.2s;
+  }
+
+  #catch:hover {
     transform: scale(1.1);
   }
 
-  /* Animation for the number */
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+  .hint {
+    position: fixed;
+    bottom: 15px;
+    width: 100%;
+    text-align: center;
+    opacity: 0.6;
+    font-size: 0.9rem;
   }
 
-  /* Floating emoji fun */
-  .emoji {
+  .popup {
     position: absolute;
-    font-size: 3em;
-    animation: floatUp linear infinite;
+    background: rgba(0,0,0,0.6);
+    padding: 8px 14px;
+    border-radius: 12px;
+    animation: fade 1.5s forwards;
   }
 
-  @keyframes floatUp {
-    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+  @keyframes fade {
+    from { opacity: 1; }
+    to { opacity: 0; transform: translateY(-20px); }
   }
 </style>
 </head>
-<body>
-  <h1>404</h1>
-  <p>Oops! This page got lost in space 🚀</p>
-  <a href="/">Go Back Home</a>
 
-  <!-- Floating emojis -->
-  <div class="emoji" style="left:10%;">💥</div>
-  <div class="emoji" style="left:30%; animation-duration: 7s;">👾</div>
-  <div class="emoji" style="left:50%; animation-duration: 6s;">🌟</div>
-  <div class="emoji" style="left:70%; animation-duration: 8s;">😵</div>
-  <div class="emoji" style="left:90%; animation-duration: 5s;">🛸</div>
+<body>
+
+<!-- Fake Loader -->
+<div id="loader">
+  <p>Loading page...</p>
+  <div class="bar">
+    <div class="fill" id="fill"></div>
+  </div>
+</div>
+
+<!-- Game -->
+<div id="game">
+  <div id="score">Score: 0</div>
+  <div id="catch">404</div>
+  <div class="hint">catch the 404 • click anywhere • nothing is real</div>
+</div>
+
+<!-- Sounds -->
+<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3"></audio>
+<audio id="catchSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-ball-tap-2073.mp3"></audio>
+
+<script>
+  // Fake loading bar
+  const fill = document.getElementById("fill");
+  let load = 0;
+
+  const fakeLoad = setInterval(() => {
+    load += Math.random() * 20;
+    if (load > 85) {
+      fill.style.width = "85%";
+      clearInterval(fakeLoad);
+      setTimeout(() => {
+        alert("404: Page failed to load successfully 😬");
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        move404();
+      }, 700);
+    }
+    fill.style.width = load + "%";
+  }, 400);
+
+  // Game logic
+  const target = document.getElementById("catch");
+  const scoreBox = document.getElementById("score");
+  const clickSound = document.getElementById("clickSound");
+  const catchSound = document.getElementById("catchSound");
+
+  let score = 0;
+
+  function move404() {
+    const x = Math.random() * (window.innerWidth - 120);
+    const y = Math.random() * (window.innerHeight - 120);
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+  }
+
+  target.addEventListener("click", e => {
+    e.stopPropagation();
+    score++;
+    scoreBox.innerText = "Score: " + score;
+    catchSound.play();
+    move404();
+
+    const pop = document.createElement("div");
+    pop.className = "popup";
+    pop.innerText = "Caught it!";
+    pop.style.left = e.clientX + "px";
+    pop.style.top = e.clientY + "px";
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 1500);
+  });
+
+  // Miss click sound
+  document.body.addEventListener("click", () => {
+    clickSound.play();
+  });
+
+  // Escape movement
+  setInterval(move404, 1500);
+</script>
+
 </body>
 </html>
